@@ -6,9 +6,11 @@
 
 package example;
 
+import com.google.common.collect.Lists;
 import com.yahoo.elide.contrib.swagger.SwaggerBuilder;
 import com.yahoo.elide.core.EntityDictionary;
 import com.yahoo.elide.standalone.config.ElideStandaloneSettings;
+import example.filters.CorsFilter;
 import example.models.ArtifactGroup;
 import example.models.ArtifactProduct;
 import example.models.ArtifactVersion;
@@ -19,12 +21,14 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lunchvoice.models.LunchComment;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -65,9 +69,7 @@ public abstract class Settings implements ElideStandaloneSettings {
     public Map<String, Swagger> enableSwagger() {
         EntityDictionary dictionary = new EntityDictionary(new HashMap());
 
-        dictionary.bindEntity(ArtifactGroup.class);
-        dictionary.bindEntity(ArtifactProduct.class);
-        dictionary.bindEntity(ArtifactVersion.class);
+        dictionary.bindEntity(LunchComment.class);
         Info info = new Info().title("Test Service").version("1.0");
 
         SwaggerBuilder builder = new SwaggerBuilder(dictionary, info);
@@ -83,7 +85,7 @@ public abstract class Settings implements ElideStandaloneSettings {
     public String getModelPackageName() {
 
         //This needs to be changed to the package where your models live.
-        return "example.models";
+        return "lunchvoice.models";
     }
 
     @Override
@@ -107,6 +109,11 @@ public abstract class Settings implements ElideStandaloneSettings {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public List<Class<?>> getFilters() {
+        return Lists.newArrayList(CorsFilter.class);
     }
 
     @Override

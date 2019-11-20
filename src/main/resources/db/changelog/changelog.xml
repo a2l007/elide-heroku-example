@@ -25,6 +25,20 @@
 	  PRIMARY KEY (name),
 	  FOREIGN KEY (artifact_name) REFERENCES ArtifactProduct(name)
 	);
+
+					CREATE TABLE LunchComment (
+					commentId int NOT NULL AUTO_INCREMENT,
+					author varchar(255) NOT NULL,
+					commentText varchar(10000),
+					diet varchar(50),
+					upvoteCount int DEFAULT 0,
+					downvoteCount int DEFAULT 0,
+					location varchar(255) DEFAULT 'Champaign',
+					responseId int NOT NULL AUTO_INCREMENT,
+					createdOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					PRIMARY KEY (commentId)
+					);
+
         </sql>
     </changeSet>
     <changeSet author="admin" id="1539122270">
@@ -37,6 +51,9 @@
 		('elide-core','Core','The guts of Elide','com.yahoo.elide'),
 		('elide-datastore-hibernate5','Hibernate5 Datastore','A datastore that uses Hibernate 5 to communicate with the database','com.yahoo.elide'),
 		('elide-standalone','Standalone','A pre-configured, standalone Elide webservice','com.yahoo.elide');
+
+					INSERT INTO LunchComment (commentId, author, commentText, diet, upvoteCount, downvoteCount, responseId ) VALUES
+					(1234,'Vegan Vance','Accidentally ate fried chicken today and it was the best thing ever!','Vegan',5,0,455544);
         </sql>
     </changeSet>
 </databaseChangeLog>
